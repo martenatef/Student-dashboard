@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="mb-4">Add Assignment for {{ course.name }}</h2>
+
+<form method="POST" class="card p-4 shadow-sm bg-white rounded">
+  <div class="mb-3">
+    <label for="title" class="form-label">Title</label>
+    <input type="text" class="form-control" id="title" name="title" required>
+  </div>
+
+  <div class="mb-3">
+    <label for="type" class="form-label">Type</label>
+    <select class="form-select" id="type" name="type" required>
+        <option value="Assignment">Assignment</option>
+      <option value="Project">Project</option>
+      <option value="Mid">Mid</option>
+      <option value="Final">Final</option>
+      <option value="Exam">Exam</option>
+      <option value="Quiz">Quiz</option>
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label for="due_date" class="form-label">Due Date</label>
+    <input type="date" class="form-control" id="due_date" name="due_date" required>
+  </div>
+
+  <div class="mb-3">
+    <label for="max_grade" class="form-label">Max Grade</label>
+    <input type="number" step="0.01" class="form-control" id="max_grade" name="max_grade" required>
+  </div>
+
+  <div class="mb-3">
+    <label for="grade" class="form-label">Your Grade (Optional)</label>
+    <input type="number" step="0.01" class="form-control" id="grade" name="grade">
+  </div>
+
+  <button type="submit" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Add Assignment</button>
+<a href="{{ url_for('dashboard') }}" class="btn btn-danger"><i class="bi bi-x-circle"></i> Cancel</a>
+</form>
+{% endblock %}

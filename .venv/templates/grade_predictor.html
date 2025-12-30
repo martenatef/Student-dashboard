@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="mb-4">Grade Predictor</h2>
+
+<form method="POST" class="card p-4 shadow-sm bg-white rounded">
+  <div class="mb-3">
+    <input type="text" name="course_name" class="form-control" placeholder="Course Name" required>
+  </div>
+
+  <div id="assignments-container">
+    <div class="mb-3 row assignment-row">
+      <div class="col">
+        <input type="number" step="0.01" name="assignment" class="form-control" placeholder="Assignment Grade" required>
+      </div>
+    </div>
+  </div>
+
+  <button type="button" class="btn btn-secondary mb-3" id="add-assignment"><i class="bi bi-plus-circle"></i> Add Assignment</button>
+
+  <div class="mb-3">
+    <input type="number" step="0.01" name="mid" class="form-control" placeholder="Midterm Grade" required>
+  </div>
+
+  <div class="mb-3">
+    <input type="number" step="0.01" name="final" class="form-control" placeholder="Final Exam Grade" required>
+  </div>
+
+  <button type="submit" class="btn btn-primary"><i class="bi bi-calculator-fill"></i> Predict Grade</button>
+  <a href="{{ url_for('dashboard') }}" class="btn btn-danger">Cancel</a>
+</form>
+
+{% if predicted_grade is not none %}
+  <div class="alert alert-success mt-3">
+    <h4>Predicted Grade for {{ course_name }}: {{ predicted_grade }}</h4>
+  </div>
+{% endif %}
+
+<script>
+document.getElementById('add-assignment').addEventListener('click', function() {
+  const container = document.getElementById('assignments-container');
+  const newRow = document.querySelector('.assignment-row').cloneNode(true);
+  newRow.querySelector('input').value = '';
+  container.appendChild(newRow);
+});
+</script>
+{% endblock %}

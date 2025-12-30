@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-light: #f8f9fa;
+      --text-light: #212529;
+      --bg-dark: #121212;
+      --text-dark: #f8f9fa;
+      --primary: #0d6efd;
+      --secondary: #20c997;
+      --glow1-light: rgba(13,110,253,0.25);
+      --glow2-light: rgba(32,201,151,0.25);
+      --glow1-dark: rgba(13,110,253,0.35);
+      --glow2-dark: rgba(102,16,242,0.3);
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-light);
+      transition: background 0.3s, color 0.3s;
+      overflow-x: hidden;
+    }
+
+    body.dark-mode {
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    /* Container layout */
+    .dashboard-container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar ثابت */
+    .sidebar {
+      width: 240px;
+      padding: 25px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: #fff;
+      background: linear-gradient(270deg, #1f1f2e, #2b2b4f, var(--primary), #1f1f2e);
+      background-size: 600% 600%;
+      animation: gradientMove 12s ease infinite;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      z-index: 1000;
+    }
+
+    @keyframes gradientMove {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .sidebar h4 {
+      font-weight: 700;
+      font-size: 1.4rem;
+      margin-bottom: 30px;
+    }
+
+    .sidebar a {
+      color: #fff;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      padding: 12px 12px;
+      margin-bottom: 6px;
+      border-radius: 10px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .sidebar a i {
+      margin-right: 12px;
+      font-size: 1.2rem;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar a:hover {
+      background: rgba(255,255,255,0.15);
+      transform: translateX(6px);
+      box-shadow: 0 0 12px rgba(13,110,253,0.5);
+    }
+
+    .sidebar a:hover i {
+      transform: rotate(15deg) scale(1.2);
+    }
+
+    /* Quotes أسفل sidebar */
+    .quotes-widget {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(6px);
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 0.85rem;
+      text-align: center;
+      min-height: 70px;
+      margin-top: auto;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .quotes-widget p {
+      margin: 0;
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+
+    .quotes-widget p.active {
+      opacity: 1;
+      text-shadow: 0 0 6px rgba(255,255,255,0.6);
+    }
+
+    /* Main content */
+    .main-content {
+      margin-left: 240px; /* لتجنب الـ sidebar */
+      flex-grow: 1;
+      padding: 25px;
+      position: relative;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Animated Glow Background */
+    .main-content::before,
+    .main-content::after {
+      content: "";
+      position: absolute;
+      width: 420px;
+      height: 420px;
+      border-radius: 50%;
+      filter: blur(120px);
+      z-index: -1;
+      animation: floatGlow 30s infinite alternate ease-in-out;
+    }
+
+    .main-content::before {
+      top: -150px;
+      left: -150px;
+      background-color: var(--glow1-light);
+    }
+    body.dark-mode .main-content::before {
+      background-color: var(--glow1-dark);
+    }
+
+    .main-content::after {
+      bottom: -150px;
+      right: -150px;
+      background-color: var(--glow2-light);
+      animation-delay: 10s;
+    }
+    body.dark-mode .main-content::after {
+      background-color: var(--glow2-dark);
+    }
+
+    @keyframes floatGlow {
+      0%   { transform: translate(0,0) scale(1); }
+      100% { transform: translate(50px,-30px) scale(1.1); }
+    }
+
+    .created-by {
+  margin-top: 10px;
+  padding-top: 8px;
+  font-size: 0.75rem;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.6);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.created-by span {
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+    /* Cards */
+    .card-hover {
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .card-hover:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    /* Table */
+    .table-responsive {
+      margin-top: 20px;
+    }
+
+    /* Toggle */
+    .dark-mode-toggle {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-container {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+      }
+      .main-content {
+        margin-left: 0;
+      }
+      .toggle-sidebar-btn {
+        display: inline-block;
+      }
+    }
+
+    .toggle-sidebar-btn {
+      display: none;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+      <div>
+        <h4><i class="bi bi-mortarboard-fill"></i> Student Dashboard</h4>
+        <a href="{{ url_for('dashboard') }}"><i class="bi bi-house-fill"></i> Dashboard</a>
+        <a href="{{ url_for('add_course') }}"><i class="bi bi-plus-circle-fill"></i> Add Course</a>
+        <a href="{{ url_for('analytics') }}"><i class="bi bi-bar-chart-line-fill"></i> Analytics</a>
+        <a href="{{ url_for('grade_predictor') }}"><i class="bi bi-journal-check"></i> Grade Predictor</a>
+        <a href="{{ url_for('gpa_calculator') }}"><i class="bi bi-calculator-fill"></i> GPA Calculator</a>
+        <a href="{{ url_for('logout') }}"><i class="bi bi-box-arrow-right"></i> Logout</a>
+      </div>
+      <div class="created-by">
+  Created by <span>Marten Atef</span>
+</div>
+
+      <div class="quotes-widget" id="quotesWidget">
+        <p class="active">"Small steps every day lead to big success."</p>
+        <p>"Consistency beats motivation."</p>
+        <p>"Your future is created by what you do today."</p>
+        <p>"Study smart, not just hard."</p>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content container-fluid">
+      <div class="d-flex justify-content-between mb-3">
+        <button class="btn btn-outline-primary toggle-sidebar-btn" id="toggleSidebar"><i class="bi bi-list"></i></button>
+        <button class="btn btn-secondary btn-sm" id="toggleMode"><i class="bi bi-moon-fill"></i></button>
+      </div>
+
+      {% block content %}
+      <!-- Example cards -->
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <div class="card card-hover p-3">
+            <h5>My Courses</h5>
+            <p>View your enrolled courses.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-3">
+          <div class="card card-hover p-3">
+            <h5>Analytics</h5>
+            <p>Check your performance stats.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-3">
+          <div class="card card-hover p-3">
+            <h5>GPA Calculator</h5>
+            <p>Calculate your GPA easily.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Example table -->
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th>Course</th>
+              <th>Instructor</th>
+              <th>Credits</th>
+              <th>Grade</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Math 101</td>
+              <td>Dr. Smith</td>
+              <td>3</td>
+              <td>A</td>
+            </tr>
+            <tr>
+              <td>Physics 201</td>
+              <td>Dr. Johnson</td>
+              <td>4</td>
+              <td>B+</td>
+            </tr>
+            <tr>
+              <td>Chemistry 101</td>
+              <td>Dr. Brown</td>
+              <td>3</td>
+              <td>A-</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      {% endblock %}
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Dark mode
+    const toggleBtn = document.getElementById('toggleMode');
+    const savedMode = localStorage.getItem('mode') || 'light';
+    if(savedMode === 'dark') document.body.classList.add('dark-mode');
+
+    toggleBtn.onclick = () => {
+      document.body.classList.toggle('dark-mode');
+      localStorage.setItem('mode', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+    };
+
+    // Quotes rotation
+    const quotes = document.querySelectorAll('#quotesWidget p');
+    let index = 0;
+    setInterval(() => {
+      quotes[index].classList.remove('active');
+      index = (index + 1) % quotes.length;
+      quotes[index].classList.add('active');
+    }, 8000);
+
+    // Sidebar toggle for mobile
+    const sidebar = document.getElementById('sidebar');
+    const toggleSidebarBtn = document.getElementById('toggleSidebar');
+    toggleSidebarBtn.addEventListener('click', () => {
+      sidebar.classList.toggle('show');
+    });
+  </script>
+
+</body>
+</html>

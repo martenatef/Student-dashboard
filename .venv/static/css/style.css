@@ -1,0 +1,74 @@
+/* ===== Sidebar Hover & Active ===== */
+.sidebar a {
+    transition: background 0.3s, color 0.3s;
+}
+.sidebar a:hover {
+    background-color: #0d6efd;
+    color: white;
+}
+.sidebar a.active {
+    background-color: #0b5ed7;
+    color: white;
+    font-weight: bold;
+}
+
+/* ===== Cards ===== */
+.card {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+/* ===== Buttons ===== */
+.btn-primary, .btn-success, .btn-danger, .btn-secondary {
+    border-radius: 8px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-primary:hover, .btn-success:hover, .btn-danger:hover, .btn-secondary:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* ===== Tables ===== */
+.table th {
+    background-color: #e9ecef;
+    font-weight: 600;
+}
+.table td {
+    vertical-align: middle;
+}
+
+/* ===== Progress Bars ===== */
+.progress {
+    height: 20px;
+    border-radius: 10px;
+}
+.progress-bar {
+    font-weight: bold;
+    color: white;
+}
+
+/* ===== Form Inputs ===== */
+input.form-control, select.form-select {
+    border-radius: 6px;
+    transition: box-shadow 0.2s;
+}
+input.form-control:focus, select.form-select:focus {
+    box-shadow: 0 0 5px rgba(13,110,253,0.5);
+}
+
+/* ===== Alerts / Results ===== */
+.alert-success {
+    border-left: 5px solid #198754;
+    font-weight: bold;
+}
+
+/* ===== Headings ===== */
+h2 {
+    margin-bottom: 20px;
+    font-weight: 600;
+}

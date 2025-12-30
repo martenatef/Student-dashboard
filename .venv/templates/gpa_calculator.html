@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="mb-4">GPA Calculator</h2>
+
+<form method="POST" class="card p-4 shadow-sm bg-white rounded">
+  <div id="courses-container">
+    <div class="mb-3 row course-row">
+      <div class="col">
+        <input type="text" class="form-control" name="course" placeholder="Course Name" required>
+      </div>
+      <div class="col">
+        <input type="number" step="0.01" class="form-control" name="grade" placeholder="Grade" required>
+      </div>
+      <div class="col">
+        <input type="number" step="0.01" class="form-control" name="credit" placeholder="Credit Hours" required>
+      </div>
+    </div>
+  </div>
+
+  <button type="button" class="btn btn-secondary mb-3" id="add-course"><i class="bi bi-plus-circle"></i> Add Course</button>
+  <br>
+  <button type="submit" class="btn btn-primary"><i class="bi bi-calculator-fill"></i> Calculate GPA</button>
+</form>
+
+{% if gpa is not none %}
+  <div class="alert alert-success mt-3">
+    <h4>Your GPA: {{ gpa }}</h4>
+  </div>
+{% endif %}
+
+<script>
+document.getElementById('add-course').addEventListener('click', function() {
+  const container = document.getElementById('courses-container');
+  const newRow = document.querySelector('.course-row').cloneNode(true);
+  newRow.querySelectorAll('input').forEach(input => input.value = '');
+  container.appendChild(newRow);
+});
+</script>
+{% endblock %}

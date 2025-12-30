@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="mb-4">Student Analytics</h2>
+
+<div class="card p-4 shadow-sm rounded">
+  <canvas id="allCoursesChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const ctx = document.getElementById('allCoursesChart').getContext('2d');
+
+// حساب أكبر عدد Assignments بين المواد
+const maxAssignments = Math.max(
+  {% for course in chart_data %}
+    {{ course.assignments|length }}{% if not loop.last %}, {% endif %}
+  {% endfor %}
+);
+
+// إنشاء labels ديناميكية
+const labels = [];
+for (let i = 0; i < maxAssignments; i++) {
+  labels.push('Assignment ' + (i + 1));
+}
+
+// إعداد datasets لكل مادة
+const datasets = [
+{% for course in chart_data %}
+{
+  label: '{{ course.name }}',
+  data: [
+    {% for a in course.assignments %}
+      {{ a.grade if a.grade is not none else 'null' }}{% if not loop.last %}, {% endif %}
+    {% endfor %}
+  ],
+  borderColor: 'hsl({{ loop.index0 * 60 }}, 70%, 50%)',
+  backgroundColor: 'hsla({{ loop.index0 * 60 }}, 70%, 50%, 0.2)',
+  fill: false,
+  tension: 0.3
+},
+{% endfor %}
+];
+
+new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: labels,
+    datasets: datasets
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: 'top' },
+      title: { display: true, text: 'Grades Progress Across All Courses' }
+    },
+    scales: {
+      y: { beginAtZero: true, max: 100 }
+    }
+  }
+});
+</script>
+{% endblock %}

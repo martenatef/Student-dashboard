@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="mb-4">Edit Grade for "{{ task.title }}"</h2>
+<p>Type: {{ task.type }} | Max Grade: {{ task.max_grade }}</p>
+
+<form method="POST" class="card p-4 shadow-sm bg-white rounded">
+  <div class="mb-3">
+    <label for="grade" class="form-label">Your Grade</label>
+    <input type="number" step="0.01" class="form-control" id="grade" name="grade" value="{{ task.grade if task.grade is not none else '' }}" required>
+  </div>
+
+  <button type="submit" class="btn btn-success"><i class="bi bi-check-circle"></i> Save Grade</button>
+<a href="{{ url_for('dashboard') }}" class="btn btn-danger"><i class="bi bi-x-circle"></i> Cancel</a>
+</form>
+{% endblock %}
